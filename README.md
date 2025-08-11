@@ -30,19 +30,31 @@
 
 ## Overview
 
-Personal Finance Advisor API is a backend service that provides core financial calculations and logic to assist users in making informed loan decisions.
+Personal Finance Advisor API is a backend service that provides core financial calculations and logic to assist users in making loan decisions.
 
-- The server exposes a RESTful API that allows clients (web or mobile) to:
+The server exposes a RESTful API that allows clients (web or mobile) to:
 
 - Submit user financial data (monthly salary, currency, interest rate, etc.)
 
-- Get calculated results:
+Get calculated results:
 
 - Maximum loan amount user can afford
+
+- Net disposable income = salary − expenses
+  → tells how much is left for savings, investments, or debt repayment.
+
+- Savings rate = (net disposable income ÷ salary) × 100
+  → shows how efficiently they save.
+
+- Debt-to-income ratio (DTI)
+  → total monthly debt ÷ salary; banks use this to judge creditworthiness.
 
 - Estimated repayment plan
 
 - Total interest paid over the selected loan term
+
+- Goal-based savings plan
+  → if they want $X in Y years, tell them how much to set aside monthly.
 
 The application is designed to be modular, scalable, and secure, allowing easy integration with frontend applications or third-party services. It handles input validation, applies financial formulas, and ensures reliable data delivery via structured API endpoints.
 
