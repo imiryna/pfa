@@ -11,5 +11,23 @@
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.33.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-promise": "7.2.1",
+    "eslint-staged": "^1.0.1",
+    "husky": "^9.1.7"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
