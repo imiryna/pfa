@@ -1,5 +1,8 @@
 const app = require("./app");
 
-module.exports = app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000");
+// SERVER INIT ================
+const port = 3001;
+
+module.exports = app.listen(port, () => {
+  console.log(`Server running. Use our API on port: ${port}`);
 });
