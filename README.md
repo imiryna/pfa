@@ -64,6 +64,74 @@ The application is designed to be modular, scalable, and secure, allowing easy i
 
 ## Authentication
 
+### Authentication Process (JWT)
+
+This API uses **JWT (JSON Web Token)** for authentication and authorization.
+
+---
+
+### 1. Get a Token
+
+Send a `POST` request to `/api/auth` with a JSON body containing the `id`.
+
+### Example Request
+
+```http
+POST /api/auth
+Content-Type: application/json
+
+{
+  "id": 242
+}
+```
+
+### Example Response
+
+```
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5..."
+}
+```
+
+The returned token must be used in the Authorization header for all protected routes.
+
+### 2. Access Protected Routes
+
+Protected endpoints require the token in the Authorization header in the format:
+
+```
+Authorization: Bearer <JWT>
+```
+
+### Example Request
+
+```
+POST /api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5...
+Content-Type: application/json
+
+{
+  "name": "Frida",
+  "email": "frida@example.com"
+}
+```
+
+### Example Response
+
+```
+{
+  "data": "Frida"
+}
+```
+
+## Error Handling
+
+### Missing token → 401 Unauthorized
+
+Invalid or expired token → 401 Unauthorized
+
+Invalid request body (e.g., missing fields) → 400 Bad Request (after validation is implemented)
+
 - ### Register
 
 - ### Login
