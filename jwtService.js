@@ -13,3 +13,12 @@ exports.checkToken = (token) => {
     throw new HttpError(401, error.message);
   }
 };
+
+exports.verifyRefresh = (id, token) => {
+  try {
+    const decoded = jwt.verify(token, process.env.REFRESH_SECRET);
+    return decoded.id === id;
+  } catch (error) {
+    throw new HttpError(401, error.message);
+  }
+};

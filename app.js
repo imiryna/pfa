@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
-const { signToken, checkToken } = require("./jwtService");
+const { signToken, checkToken, verifyRefresh } = require("./jwtService");
 const HttpError = require("./helpers/httpError");
 
 const app = express();
@@ -20,13 +20,30 @@ app.use(morgan("dev"));
 app.post("/auth", (req, res) => {
   try {
     const id = req.body.id;
-    const token = signToken(id);
 
-    return res.status(201).json({ token: token });
+    const token = signToken(id);
+    const refreshToken = verifyRefresh(id);
+
+    return res.status(201).json({ token: token, refreshToken: refreshToken });
   } catch (error) {
     return HttpError(401, "unauthorized");
   }
 });
+
+app.post("/auth/refresh", (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) return res.status(401).json({ message: "Missing token" });
+
+  try {
+    const newAccessToken = verifyRefresh(refreshToken);
+
+    res.json({ accessToken: newAccessToken });
+  } catch (error) {
+    res.status(403).json({ message: "Invalid refresh token" });
+  }
+});
+
 // AUTH_MIDDLEWARE ======
 const authMiddleware = (req, res, next) => {
   const rawToken = req.headers.authorization;
