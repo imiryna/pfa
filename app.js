@@ -21,8 +21,10 @@ app.post("/auth", (req, res) => {
   try {
     const id = req.body.id;
 
-    const token = signToken(id);
-    const refreshToken = verifyRefresh(id);
+    if (!id) return res.status(400).json({ message: "enter valid credientials" });
+
+    const token = signToken({ id }, process.env.JWT_SECRET, process.env.JWT_EXPIRES);
+    const refreshToken = signToken({ id }, process.env.REFRESH_SECRET, process.env.REFRESH_EXPIRES);
 
     return res.status(201).json({ token: token, refreshToken: refreshToken });
   } catch (error) {
@@ -31,14 +33,15 @@ app.post("/auth", (req, res) => {
 });
 
 app.post("/auth/refresh", (req, res) => {
-  const { refreshToken } = req.body;
+  const { id, refreshToken } = req.body;
 
   if (!refreshToken) return res.status(401).json({ message: "Missing token" });
 
   try {
-    const newAccessToken = verifyRefresh(refreshToken);
-
-    res.json({ accessToken: newAccessToken });
+    if (verifyRefresh(refreshToken)) {
+      const newAccessToken = signToken({ id }, process.env.JWT_SECRET, process.env.JWT_EXPIRES);
+      res.status(201).json({ id: id, accessToken: newAccessToken });
+    }
   } catch (error) {
     res.status(403).json({ message: "Invalid refresh token" });
   }
