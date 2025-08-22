@@ -38,7 +38,7 @@ app.post("/auth/refresh", (req, res) => {
   if (!refreshToken) return res.status(401).json({ message: "Missing token" });
 
   try {
-    if (verifyRefresh(refreshToken)) {
+    if (verifyRefresh(id, refreshToken)) {
       const newAccessToken = signToken({ id }, process.env.JWT_SECRET, process.env.JWT_EXPIRES);
       res.status(201).json({ id: id, accessToken: newAccessToken });
     }
