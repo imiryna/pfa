@@ -66,7 +66,11 @@ The application is designed to be modular, scalable, and secure, allowing easy i
 
 ### Authentication Process (JWT)
 
-This API uses **JWT (JSON Web Token)** for authentication and authorization.
+This API implements authentication using a **custom JWT implementation** (without `jsonwebtoken`).  
+The flow is based on **two tokens**:
+
+- `accessToken` — short-lived, used to access protected resources.
+- `refreshToken` — long-lived, used to renew the `accessToken`.
 
 ---
 
@@ -89,18 +93,21 @@ Content-Type: application/json
 
 ```
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5..."
+  "id": 242,
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5..."
 }
 ```
 
 The returned token must be used in the Authorization header for all protected routes.
 
-### 2. Access Protected Routes
+## 2. Access Protected Routes
 
-Protected endpoints require the token in the Authorization header in the format:
+Any protected endpoint requires the accessToken in the Authorization header.
 
 ```
-Authorization: Bearer <JWT>
+GET /api/users
+Authorization: Bearer <accessToken>
 ```
 
 ### Example Request
@@ -121,6 +128,22 @@ Content-Type: application/json
 ```
 {
   "data": "Frida"
+}
+```
+
+## 3. Refresh Access Token
+
+When the accessToken has expired, you can request a new one using the refreshToken.
+
+### Example Reqest
+
+```
+POST /auth/refresh
+Content-Type: application/json
+
+{
+  "id": 242,
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5..."
 }
 ```
 
