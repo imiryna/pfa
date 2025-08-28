@@ -4,8 +4,14 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const { signToken, checkToken, verifyRefresh } = require("./jwtService");
 const HttpError = require("./helpers/httpError");
+const { Client } = require("pg");
 
 const app = express();
+
+// const conStringUrlDb
+
+const client = new Client(conStringUrlDb);
+await client.connect(conStringUrlDb);
 
 dotenv.config({
   path: "./.env",
