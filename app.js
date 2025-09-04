@@ -4,14 +4,9 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const { signToken, checkToken, verifyRefresh } = require("./jwtService");
 const HttpError = require("./helpers/httpError");
-const { Client } = require("pg");
+const runQuery = require("./db");
 
 const app = express();
-
-// const conStringUrlDb
-
-const client = new Client(conStringUrlDb);
-await client.connect(conStringUrlDb);
 
 dotenv.config({
   path: "./.env",
@@ -72,6 +67,7 @@ const authMiddleware = (req, res, next) => {
 // CRUD =============
 app.post("/users", authMiddleware, (req, res) => {
   try {
+    runQuery();
     const { name, email } = req.body;
 
     // TODO: data validation
