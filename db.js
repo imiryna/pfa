@@ -1,14 +1,9 @@
 const { Client } = require("pg");
-const client = new Client({
-  database: "fin_adviser",
-});
-// {
-//     user: process.env.PGUSER,
-//     password: process.env.PGPASSWORD,
-//     host: process.env.PGHOST,
-//     port: process.env.PGPORT,
-//     database: process.env.PGDATABASE,
-//   }
+
+require("dotenv").config();
+
+const client = new Client();
+
 async function runQuery() {
   try {
     await client.connect();
