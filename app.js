@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const { signToken, checkToken, verifyRefresh } = require("./jwtService");
 const HttpError = require("./helpers/httpError");
-const runQuery = require("./db");
+const getUsers = require("./services");
 
 const app = express();
 
@@ -67,14 +67,15 @@ const authMiddleware = (req, res, next) => {
 // CRUD =============
 app.post("/users", authMiddleware, (req, res) => {
   try {
-    runQuery();
-    const { name, email } = req.body;
+    getUsers();
+    const { name, email, password } = req.body;
 
     // TODO: data validation
 
     const user = {
       name,
       email,
+      password,
     };
 
     // save to DB

@@ -4,13 +4,13 @@ require("dotenv").config();
 
 const client = new Client();
 
-async function runQuery() {
+async function runQuery(queryString) {
   try {
     await client.connect();
-    const result = await client.query("SELECT NOW()");
-    console.log(result);
+    const result = await client.query(queryString);
+    return result;
   } catch (error) {
-    console.error(err);
+    throw error;
   } finally {
     await client.end();
   }
