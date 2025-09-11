@@ -11,13 +11,15 @@ const client = new Client();
 async function runQuery() {
   try {
     await client.connect();
-    const result = await client.query(sql);
-    return result;
+    await client.query(sql);
+    console.log("Schema executed successfully");
   } catch (error) {
     throw error;
   } finally {
     await client.end();
   }
 }
+
+runQuery();
 
 module.exports = runQuery;

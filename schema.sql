@@ -1,11 +1,18 @@
 -- Enable UUID generator
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
-DO $$
-CREATE TYPE a_type AS ENUM ('bank', 'cc', 'investment', 'cash', 'crypto');
-CREATE TYPE c_type AS ENUM ('income', 'expenses', 'transfer');
-CREATE TYPE b_period AS ENUM ('daily', 'weekly', 'biweekly', 'monthly', 'annual');
-END$$ LANGUAGE plpgsql;
+DO $$ 
+BEGIN 
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'a_type') THEN 
+  CREATE TYPE a_type AS ENUM ('bank','cc','investment','cash','crypto'); 
+    END IF; 
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'c_type') THEN 
+  CREATE TYPE c_type AS ENUM ('income','expenses','transfer'); 
+    END IF; 
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'b_period') THEN 
+  CREATE TYPE b_period AS ENUM ('daily','weekly','biweekly','monthly','annual'); 
+    END IF; 
+END$$;
 
 -- Create Users table
 CREATE TABLE IF NOT EXISTS users(
