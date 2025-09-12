@@ -60,6 +60,52 @@ The application is designed to be modular, scalable, and secure, allowing easy i
 
 ## Setup
 
+### 1. Install dependencies
+
+Install necessary libraries:
+
+```
+npm install pg dotenv
+```
+
+### 2. Configure database access
+
+Create a .env file with your PostgreSQL connection details, e.g.:
+
+```
+PGHOST=localhost
+PGPORT=5432
+PGUSER=postgres
+PGPASSWORD=yourpassword
+PGDATABASE=fin_advisor
+```
+
+Make sure the database (`fin_advisor` in this example) already exists.
+
+### 3. Initial data
+
+Have your schema.sql file in the same folder. It should contain all statements `CREATE TYPE`, `CREATE TABLE`, `ALTER TABLE`, `CREATE INDEX`, etc.
+
+### 4. Script for loading sample data
+
+Create JS code for execute `.sql` file. For example `db.js`.
+
+### 5. Run the setup script
+
+From the terminal, execute:
+
+```
+node db.js
+```
+
+The `db.js` reads `schema.sql`, connects to Postgres using the credentials from .env, and executes the SQL to create all tables, types, and constraints.
+
+If everything is configured correctly you’ll see:
+
+```
+Schema executed successfully
+```
+
 ## Summary
 
 ## Authentication
