@@ -4,22 +4,22 @@ const { Client } = require("pg");
 require("dotenv").config();
 
 // Read the SQL file
-const sql = readFileSync("schema.sql", "utf8");
+const initSql = readFileSync("schema.sql", "utf8");
 
 const client = new Client();
 
-async function runQuery() {
+exports.runQuery = async (sql) => {
   try {
     await client.connect();
-    await client.query(sql);
-    console.log("Schema executed successfully");
+    const response = await client.query(sql);
+    return response;
   } catch (error) {
     throw error;
   } finally {
     await client.end();
   }
-}
+};
 
-runQuery();
+//runQuery();
 
-module.exports = runQuery;
+// module.exports = runQuery;

@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const { signToken, checkToken, verifyRefresh } = require("./jwtService");
 const HttpError = require("./helpers/httpError");
-const getUsers = require("./services");
+const { getUsers, createUser } = require("./services");
 
 const app = express();
 
@@ -65,30 +65,36 @@ const authMiddleware = (req, res, next) => {
 };
 
 // CRUD =============
-app.post("/users", authMiddleware, (req, res) => {
+app.get("/users", async (req, res) => {
   try {
-    getUsers();
-    const { name, email, password } = req.body;
-
-    // TODO: data validation
-
-    const user = {
-      name,
-      email,
-      password,
-    };
-
-    // save to DB
+    const result = await getUsers();
+    console.log(result);
 
     res.status(201).json({
-      data: req.body.name,
+      data: result.rows,
     });
   } catch (error) {
     console.log(error);
   }
 });
 
-app.get("/", (req, res) => {
+app.post("/", async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    // TODO: validation
+
+    const newUser = await createUser({ name, email, password });
+
+    res.status(201).json({
+      newUser,
+    });
+  } catch (err) {
+    return HttpError(500);
+  }
+});
+
+app.get("/", async (req, res) => {
   res.status(200).json("hello");
 });
 
