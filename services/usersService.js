@@ -16,7 +16,11 @@ exports.createUser = async ({ name, email, password }) => {
 
 exports.updateUserInDb = async (id, ...rest) => {
   const [name, email] = rest;
-  const query = "UPDATE users SET name = $1, email = $2 WHERE id = $3";
+  const query = "UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *";
   const params = [name, email, id];
   return await runQuery(query, params);
+};
+
+exports.deleteUserById = async (id) => {
+  return await runQuery("DELETE FROM users WHERE id = $1 RETURNING *", [id]);
 };

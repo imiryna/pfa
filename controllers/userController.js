@@ -67,15 +67,34 @@ exports.updateUser = async (req, res, next) => {
     const { name, email } = req.body;
 
     // check if user exists
-    // const user = await getOneUser(id);
-    // if (!user) {
-    //   return HttpError(404, "User not found");
-    // }
+    const user = await getOneUser(id);
+    if (!user) {
+      return HttpError(404, "User not found");
+    }
 
     updateUserInDb(id, name, email);
 
     response.status(200).send(`User modified with ID: ${id}`);
   } catch (er) {
     next(er);
+  }
+};
+
+// delete
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const result = await getOneUser(id);
+
+    if (!result) {
+      return HttpError(404, "User not found");
+    }
+
+    deleteUserById(id);
+
+    response.status(200).send(`User deleted with ID: ${id}`);
+  } catch (error) {
+    next(error);
   }
 };
