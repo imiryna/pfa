@@ -1,22 +1,19 @@
 const { readFileSync } = require("fs");
-const { Client } = require("pg");
+const { Pool } = require("pg");
 
 require("dotenv").config();
 
 // Read the SQL file
 const initSql = readFileSync("schema.sql", "utf8");
 
-const client = new Client();
+const client = new Pool();
 
-exports.runQuery = async (sql) => {
+exports.runQuery = async (sql, params = []) => {
   try {
-    await client.connect();
-    const response = await client.query(sql);
+    const response = await client.query(sql, params);
     return response;
   } catch (error) {
     throw error;
-  } finally {
-    await client.end();
   }
 };
 

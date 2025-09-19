@@ -1,6 +1,6 @@
 // const jwt = require("jsonwebtoken");
 
-const HttpError = require("./helpers/httpError");
+const HttpError = require("../helpers/httpError");
 const crypto = require("crypto");
 
 // Convert a string to Base64
@@ -57,6 +57,7 @@ const verify = (token, secret) => {
   return bodyDecod;
 };
 
+//checkToken
 exports.checkToken = (token) => {
   try {
     const { id } = verify(token, process.env.JWT_SECRET);
@@ -67,6 +68,7 @@ exports.checkToken = (token) => {
   }
 };
 
+//verifyRefresh of token
 exports.verifyRefresh = (id, token) => {
   try {
     const decoded = verify(token, process.env.REFRESH_SECRET);

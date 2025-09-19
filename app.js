@@ -2,20 +2,35 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
-const { signToken, checkToken, verifyRefresh } = require("./jwtService");
+const { signToken, verifyRefresh } = require("./services/jwtService");
 const HttpError = require("./helpers/httpError");
 const { getUsers, createUser } = require("./services");
 
+require("dotenv").config();
+
+// const authRouter = require("./routes/authRoute");
+const userRouter = require("./routes/userRoute");
+
 const app = express();
 
-dotenv.config({
-  path: "./.env",
-});
+// dotenv.config({
+//   path: "./.env",
+// });
 
 // MIDDLEWARE ========
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
+
+app.use("/api/users", userRouter);
+
+app.use((req, res) => {
+  res.status(404).json({ message: "Not found" });
+});
+
+app.use((err, req, res, next) => {
+  res.status(err.status).json({ message: err.message });
+});
 
 // POST_AUTH =========
 app.post("/auth", (req, res) => {
@@ -48,35 +63,7 @@ app.post("/auth/refresh", (req, res) => {
   }
 });
 
-// AUTH_MIDDLEWARE ======
-const authMiddleware = (req, res, next) => {
-  const rawToken = req.headers.authorization;
-
-  if (!rawToken) return res.status(401).json("unauthorized");
-  const token = rawToken.split(" ")[1];
-
-  //verify of token
-  try {
-    checkToken(token);
-  } catch (e) {
-    return res.status(e.status).json({ message: e.message });
-  }
-  next();
-};
-
 // CRUD =============
-app.get("/users", async (req, res) => {
-  try {
-    const result = await getUsers();
-    console.log(result);
-
-    res.status(201).json({
-      data: result.rows,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
 
 app.post("/", async (req, res) => {
   try {
@@ -96,14 +83,6 @@ app.post("/", async (req, res) => {
 
 app.get("/", async (req, res) => {
   res.status(200).json("hello");
-});
-
-app.use((req, res) => {
-  res.status(404).json({ message: "Not found" });
-});
-
-app.use((err, req, res, next) => {
-  res.status(err.status).json({ message: err.message });
 });
 
 module.exports = app; // export instance app

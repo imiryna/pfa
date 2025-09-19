@@ -1,3 +1,6 @@
-//const {} require()
+const { getAllUsers, createUser } = require("./userController");
 
-//module.exports = {}
+module.exports = {
+  getAllUsers,
+  createUser,
+};
