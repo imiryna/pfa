@@ -8,7 +8,7 @@ exports.getAllUsers = async (req, res, next) => {
     const result = await getUsers();
     // console.log(result);
 
-    res.status(201).json({
+    res.status(200).json({
       data: result.rows,
     });
   } catch (error) {

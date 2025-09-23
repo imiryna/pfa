@@ -1,6 +1,7 @@
 const { getUsers, getOneUser, createUser, updateUserInDb, deleteUserById } = require("./usersService");
 const { verifyRefresh, signToken } = require("./jwtService");
 const { getAccounts, getOneAccount, createAccount, updateAccountInDb, deleteAccountById } = require("./accountService");
+const { getCategories, getOneCategory, createCategory, updateCategoryInDb, deleteCategoryById } = require("./categoryService");
 
 module.exports = {
   getUsers,
@@ -15,4 +16,9 @@ module.exports = {
   createAccount,
   updateAccountInDb,
   deleteAccountById,
+  getCategories,
+  getOneCategory,
+  createCategory,
+  updateCategoryInDb,
+  deleteCategoryById,
 };

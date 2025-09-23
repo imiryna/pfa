@@ -7,7 +7,7 @@ exports.getAllAccounts = async (req, res, next) => {
   try {
     const result = await getAccounts();
 
-    res.status(201).json({
+    res.status(200).json({
       data: result.rows,
     });
   } catch (error) {
@@ -82,7 +82,7 @@ exports.updateAccount = async (req, res, next) => {
 
     updateAccountInDb(id, user_id, account_type, institution_name, alias, currency, balance);
 
-    res.status(200).send(`Acvcount modified with ID: ${id}`);
+    res.status(200).send(`Account modified with ID: ${id}`);
   } catch (er) {
     next(er);
   }
