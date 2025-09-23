@@ -32,20 +32,23 @@ exports.getAccountById = async (req, res, next) => {
 
 exports.createNewAccount = async (req, res, next) => {
   try {
-    const { userId } = req.params;
-    const { ...restAccontData } = req.body;
+    const accountData = req.body;
 
-    const isUser = await getOneUser(userId);
+    const isUser = await getOneUser(accountData.user_id);
 
-    if (!isUser) {
+    if (isUser.rowCount < 1) {
       return HttpError(404, "User not found");
     }
 
     // console.log(passwordValidate);
 
     const result = await createAccount({
-      user_id: userId,
-      ...restAccontData,
+      user_id: accountData.user_id,
+      accountType: accountData.account_type,
+      institutionName: accountData.institution_name,
+      alias: accountData.alias,
+      currency: accountData.currency,
+      balance: accountData.balance,
     });
     const newAccount = result.rows.pop();
 
@@ -63,7 +66,7 @@ exports.createNewAccount = async (req, res, next) => {
 exports.updateAccount = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { account_type, institution_name, alias, currency } = req.body;
+    const { user_id, account_type, institution_name, alias, currency, balance } = req.body;
 
     // check if account exists
     const account = await getOneAccount(id);
@@ -71,9 +74,15 @@ exports.updateAccount = async (req, res, next) => {
       return HttpError(404, "Account not found");
     }
 
-    updateAccountInDb(id, account_type, institution_name, alias, currency);
+    // check if user exists
+    const isUser = req.body.user_id;
+    if (isUser.rowCount < 1) {
+      return HttpError(404, "User not found");
+    }
 
-    response.status(200).send(`Acvcount modified with ID: ${id}`);
+    updateAccountInDb(id, user_id, account_type, institution_name, alias, currency, balance);
+
+    res.status(200).send(`Acvcount modified with ID: ${id}`);
   } catch (er) {
     next(er);
   }
@@ -92,7 +101,7 @@ exports.deleteAccount = async (req, res, next) => {
 
     deleteAccountById(id);
 
-    response.status(200).send(`Account deleted with ID: ${id}`);
+    res.status(200).send(`Account deleted with ID: ${id}`);
   } catch (error) {
     next(error);
   }

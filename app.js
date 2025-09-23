@@ -12,6 +12,10 @@ require("dotenv").config();
 const userRouter = require("./routes/userRoute");
 const accountRouter = require("./routes/accountRoute");
 
+// Swagger implemetation
+const swaggerUI = require("swagger-ui-express");
+const swaggerSpec = require("./swaggerConfig");
+
 const app = express();
 
 // dotenv.config({
@@ -23,6 +27,10 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
+// Serve Swagger documentation
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+
+// API routes
 app.use("/api/users", userRouter);
 app.use("/api/accounts", accountRouter);
 
