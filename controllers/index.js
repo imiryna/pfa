@@ -1,12 +1,15 @@
-const { getAllUsers, createUser, updateUser, deleteUser } = require("./userController");
+const { getAllUsers, getUserById, createUser, updateUser, deleteUser } = require("./userController");
 const { getAllAccounts, getAccountById, createNewAccount, updateAccount, deleteAccount } = require("./accountController");
 const { getAllCategories, getCategoryById, createNewCategory, updateCategory, deleteCategory } = require("./categoryController");
 const { getAllTransaction, getTransactionById, createNewTransaction } = require("./transactionController");
+const { getAllBudgets, getBudgetById, createNewBudget, updateBudget } = require("./budgetController");
+const { deleteBudgetById } = require("../services");
 
 module.exports = {
   getAllUsers,
   createUser,
   updateUser,
+  getUserById,
   deleteUser,
   getAllAccounts,
   getAccountById,
@@ -21,4 +24,9 @@ module.exports = {
   getAllTransaction,
   getTransactionById,
   createNewTransaction,
+  getAllBudgets,
+  getBudgetById,
+  createNewBudget,
+  updateBudget,
+  deleteBudgetById,
 };

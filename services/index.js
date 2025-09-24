@@ -3,6 +3,7 @@ const { verifyRefresh, signToken } = require("./jwtService");
 const { getAccounts, getOneAccount, createAccount, updateAccountInDb, updateAccountBalance, deleteAccountById } = require("./accountService");
 const { getCategories, getOneCategory, createCategory, updateCategoryInDb, deleteCategoryById } = require("./categoryService");
 const { getTransaction, getOneTransaction, createTransaction } = require("./transactionService");
+const { getBudget, getOneBudget, createBudget, updateBudgetInDb, deleteBudgetById } = require("./budgetService");
 
 module.exports = {
   getUsers,
@@ -26,4 +27,9 @@ module.exports = {
   getTransaction,
   getOneTransaction,
   createTransaction,
+  getBudget,
+  getOneBudget,
+  createBudget,
+  updateBudgetInDb,
+  deleteBudgetById,
 };

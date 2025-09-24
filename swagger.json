@@ -1,0 +1,278 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Finance API",
+    "version": "1.0.0",
+    "description": "API for categories, transactions, users and accounts"
+  },
+  "paths": {
+    "/api/categories": {
+      "get": {
+        "summary": "Get all categories",
+        "responses": {
+          "200": {
+            "description": "List of categories",
+            "content": {
+              "application/json": {
+                "example": [
+                  { "id": "1", "name": "Food" },
+                  { "id": "2", "name": "Transport" }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new category",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": { "name": "New Category" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Category created" }
+        }
+      }
+    },
+    "/api/categories/{id}": {
+      "get": {
+        "summary": "Get category by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Category ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single category object",
+            "content": {
+              "application/json": {
+                "example": { "id": "1", "name": "Food" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Update category by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Category ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": { "name": "Updated Category" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Category updated" }
+        }
+      },
+      "delete": {
+        "summary": "Delete category by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Category ID"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Category deleted" }
+        }
+      }
+    }
+  },
+  "/api/transactions": {
+    "get": {
+      "summary": "Get all transactions",
+      "responses": {
+        "200": {
+          "description": "List of transactions",
+          "content": {
+            "application/json": {
+              "example": [
+                { "id": "1", "amount": 100, "categoryId": "1" },
+                { "id": "2", "amount": 50, "categoryId": "2" }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/transactions/{id}": {
+    "get": {
+      "summary": "Get transaction by ID",
+      "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+      "responses": {
+        "200": {
+          "description": "Single transaction",
+          "content": {
+            "application/json": {
+              "example": { "id": "1", "amount": 100, "categoryId": "1" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/users": {
+    "get": {
+      "summary": "Get all users",
+      "responses": {
+        "200": {
+          "description": "List of users",
+          "content": {
+            "application/json": {
+              "example": [
+                { "id": "1", "name": "Ivan" },
+                { "id": "2", "name": "Anna" }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "summary": "Create a new user",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "example": { "name": "New User" }
+          }
+        }
+      },
+      "responses": {
+        "201": { "description": "User created" }
+      }
+    }
+  },
+  "/api/users/{id}": {
+    "get": {
+      "summary": "Get user by ID",
+      "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+      "responses": {
+        "200": {
+          "description": "Single user object",
+          "content": {
+            "application/json": {
+              "example": { "id": "1", "name": "Ivan" }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "summary": "Update user by ID",
+      "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "example": { "name": "Updated User" }
+          }
+        }
+      },
+      "responses": {
+        "200": { "description": "User updated" }
+      }
+    },
+    "delete": {
+      "summary": "Delete user by ID",
+      "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+      "responses": {
+        "200": { "description": "User deleted" }
+      }
+    }
+  },
+  "/api/accounts": {
+    "get": {
+      "summary": "Get all accounts",
+      "responses": {
+        "200": {
+          "description": "List of accounts",
+          "content": {
+            "application/json": {
+              "example": [
+                { "id": "1", "name": "Main Account" },
+                { "id": "2", "name": "Savings" }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "summary": "Create a new account",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "example": { "name": "New Account" }
+          }
+        }
+      },
+      "responses": {
+        "201": { "description": "Account created" }
+      }
+    }
+  },
+  "/api/accounts/{id}": {
+    "get": {
+      "summary": "Get account by ID",
+      "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+      "responses": {
+        "200": {
+          "description": "Single account object",
+          "content": {
+            "application/json": {
+              "example": { "id": "1", "name": "Main Account" }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "summary": "Update account",
+      "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "example": { "name": "Updated Account" }
+          }
+        }
+      },
+      "responses": {
+        "200": { "description": "Account updated" }
+      }
+    },
+    "delete": {
+      "summary": "Delete account",
+      "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+      "responses": {
+        "200": { "description": "Account deleted" }
+      }
+    }
+  }
+}

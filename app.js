@@ -16,7 +16,7 @@ const transactionRouret = require("./routes/transactionRoute");
 
 // Swagger implemetation
 const swaggerUI = require("swagger-ui-express");
-const swaggerSpec = require("./swaggerConfig");
+const swaggerSpec = require("./swagger.json");
 
 const app = express();
 

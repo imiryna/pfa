@@ -1,4 +1,4 @@
-const { getAllAccounts, getAccountById, createNewAccount, updateAccount, deleteAccount } = require("../controllers/accountController");
+const { getAllAccounts, getAccountById, createNewAccount, updateAccount, deleteAccount } = require("../controllers");
 const { Router } = require("express");
 
 const router = Router();

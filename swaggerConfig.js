@@ -4,15 +4,14 @@ const swaggerDefinition = {
   openapi: "3.0.0",
   info: {
     title: "Personal Finance Advisor API",
-    version: "1.0.0",
+    version: "0.0.1",
     description: "API documentation using Swagger",
   },
 };
 
 const options = {
   swaggerDefinition,
-  apis: ["./routes/*.js"], // Path to the API routes
+  apis: ["./swagger.json"], // path to files with JSDoc comments
 };
 
-const swaggerSpec = swaggerJSDoc(options);
-module.exports = swaggerSpec;
+module.exports = swaggerJSDoc(options);
