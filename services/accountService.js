@@ -21,6 +21,12 @@ exports.updateAccountInDb = async (id, ...rest) => {
   return await runQuery(query, params);
 };
 
+exports.updateAccountBalance = async (id, balance) => {
+  const params = [balance, id];
+  const query = "UPDATE account SET balance = $1 WHERE id = $2 RETURNING *";
+  return await runQuery(query, params);
+};
+
 exports.deleteAccountById = async (id) => {
   return await runQuery(`DELETE FROM account WHERE id = $1 RETURNING *`, [id]);
 };

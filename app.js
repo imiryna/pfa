@@ -11,6 +11,8 @@ require("dotenv").config();
 // const authRouter = require("./routes/authRoute");
 const userRouter = require("./routes/userRoute");
 const accountRouter = require("./routes/accountRoute");
+const categoryRouter = require("./routes/categoryRoute");
+const transactionRouret = require("./routes/transactionRoute");
 
 // Swagger implemetation
 const swaggerUI = require("swagger-ui-express");
@@ -33,6 +35,8 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 // API routes
 app.use("/api/users", userRouter);
 app.use("/api/accounts", accountRouter);
+app.use("/api/category", categoryRouter);
+app.use("/api/transaction", transactionRouret);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

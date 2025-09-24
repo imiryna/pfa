@@ -46,7 +46,6 @@ CREATE TABLE IF NOT EXISTS category (
 -- Create Transactions 
 CREATE TABLE IF NOT EXISTS transaction (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     account_id uuid NOT NULL REFERENCES account(id) ON DELETE CASCADE,
     category_id uuid REFERENCES category(id) ON DELETE SET NULL,
     amount numeric(12,2) NOT NULL,

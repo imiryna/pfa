@@ -41,9 +41,9 @@ exports.createNewCategory = async (req, res, next) => {
     }
 
     const result = await createCategory({
-      user_id: accountData.user_id,
-      name: accountData.name,
-      categoryType: accountData.category_type,
+      user_id: categoryData.user_id,
+      name: categoryData.name,
+      category_type: categoryData.category_type,
     });
 
     const newCategory = result.rows.pop();
