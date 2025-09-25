@@ -4,6 +4,7 @@ const { getAllCategories, getCategoryById, createNewCategory, updateCategory, de
 const { getAllTransaction, getTransactionById, createNewTransaction } = require("./transactionController");
 const { getAllBudgets, getBudgetById, createNewBudget, updateBudget } = require("./budgetController");
 const { deleteBudgetById } = require("../services");
+const { calcDisposableIncome } = require("./calculatesController");
 
 module.exports = {
   getAllUsers,
@@ -29,4 +30,5 @@ module.exports = {
   createNewBudget,
   updateBudget,
   deleteBudgetById,
+  calcDisposableIncome,
 };

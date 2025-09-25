@@ -4,6 +4,7 @@ const { getAccounts, getOneAccount, createAccount, updateAccountInDb, updateAcco
 const { getCategories, getOneCategory, createCategory, updateCategoryInDb, deleteCategoryById } = require("./categoryService");
 const { getTransaction, getOneTransaction, createTransaction } = require("./transactionService");
 const { getBudget, getOneBudget, createBudget, updateBudgetInDb, deleteBudgetById } = require("./budgetService");
+const { disposalIncome, savingRate, calcMaximumLoan } = require("./calculatesService");
 
 module.exports = {
   getUsers,
@@ -32,4 +33,7 @@ module.exports = {
   createBudget,
   updateBudgetInDb,
   deleteBudgetById,
+  disposalIncome,
+  savingRate,
+  calcMaximumLoan,
 };

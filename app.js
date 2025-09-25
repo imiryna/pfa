@@ -13,6 +13,7 @@ const userRouter = require("./routes/userRoute");
 const accountRouter = require("./routes/accountRoute");
 const categoryRouter = require("./routes/categoryRoute");
 const transactionRouret = require("./routes/transactionRoute");
+const calcRoute = require("./routes/calculateRoute");
 
 // Swagger implemetation
 const swaggerUI = require("swagger-ui-express");
@@ -37,6 +38,7 @@ app.use("/api/users", userRouter);
 app.use("/api/accounts", accountRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/transaction", transactionRouret);
+app.use("/api/calc", calcRoute);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
@@ -75,28 +77,6 @@ app.post("/auth/refresh", (req, res) => {
   } catch (error) {
     res.status(403).json({ message: "Invalid refresh token" });
   }
-});
-
-// CRUD =============
-
-app.post("/", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-
-    // TODO: validation
-
-    const newUser = await createUser({ name, email, password });
-
-    res.status(201).json({
-      newUser,
-    });
-  } catch (err) {
-    return HttpError(500);
-  }
-});
-
-app.get("/", async (req, res) => {
-  res.status(200).json("hello");
 });
 
 module.exports = app; // export instance app
