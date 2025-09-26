@@ -22,7 +22,7 @@ exports.calcSavingRate = async (req, res) => {
 
   const rate = await savingRate(user_id);
 
-  return res.status(201).json("saving rate", rate);
+  return res.status(201).json({ "saving rate": rate });
 };
 
 exports.calcMaximumLoan = async (req, res) => {

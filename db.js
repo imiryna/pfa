@@ -17,6 +17,13 @@ exports.runQuery = async (sql, params = []) => {
   }
 };
 
-//runQuery();
+exports.healthCheck = async () => {
+  try {
+    await client.query("SELECT 1");
+    return { status: "ok" };
+  } catch (error) {
+    return { status: "error", message: error.message };
+  }
+};
 
 // module.exports = runQuery;

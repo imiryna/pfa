@@ -58,7 +58,7 @@ Get calculated results:
 
 The application is designed to be modular, scalable, and secure, allowing easy integration with frontend applications or third-party services. It handles input validation, applies financial formulas, and ensures reliable data delivery via structured API endpoints.
 
-## Setup
+## Setup development environment
 
 ### 1. Install dependencies
 
@@ -105,6 +105,13 @@ If everything is configured correctly you’ll see:
 ```
 Schema executed successfully
 ```
+
+## Start project locally
+
+1. Install Docker.
+2. Clone this repository.
+3. Run `docker compose up`. (or `docker compose -p pfa up -d `)
+4. Access the API through http://localhost:3000.
 
 ## Summary
 

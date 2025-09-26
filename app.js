@@ -19,6 +19,9 @@ const calcRoute = require("./routes/calculateRoute");
 const swaggerUI = require("swagger-ui-express");
 const swaggerSpec = require("./swagger.json");
 
+// function for healthcheck DB
+const { healthCheck } = require("./db");
+
 const app = express();
 
 // dotenv.config({
@@ -40,12 +43,17 @@ app.use("/api/category", categoryRouter);
 app.use("/api/transaction", transactionRouret);
 app.use("/api/calc", calcRoute);
 
+app.get("/health", async (req, res) => {
+  const dbHealth = await healthCheck();
+  return res.status(200).json({ app: true, db: dbHealth });
+});
+
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
 
 app.use((err, req, res, next) => {
-  res.status(err.status).json({ message: err.message });
+  res.status(500).json({ message: err.stack });
 });
 
 // POST_AUTH =========
