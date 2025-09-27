@@ -1,4 +1,4 @@
-const { getUsers, getOneUser, createUser, updateUserInDb, deleteUserById } = require("./usersService");
+const { getUsers, getOneUser, getUserByEmail, createUser, updateUserInDb, deleteUserById } = require("./usersService");
 const { verifyRefresh, signToken } = require("./jwtService");
 const { getAccounts, getOneAccount, createAccount, updateAccountInDb, updateAccountBalance, deleteAccountById } = require("./accountService");
 const { getCategories, getOneCategory, createCategory, updateCategoryInDb, deleteCategoryById } = require("./categoryService");
@@ -9,6 +9,7 @@ const { disposalIncome, savingRate, calcMaximumLoan } = require("./calculatesSer
 module.exports = {
   getUsers,
   getOneUser,
+  getUserByEmail,
   createUser,
   updateUserInDb,
   deleteUserById,

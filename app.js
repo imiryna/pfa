@@ -9,6 +9,7 @@ const { getUsers, createUser } = require("./services");
 require("dotenv").config();
 
 // const authRouter = require("./routes/authRoute");
+const authRouter = require("./routes/authRoute");
 const userRouter = require("./routes/userRoute");
 const accountRouter = require("./routes/accountRoute");
 const categoryRouter = require("./routes/categoryRoute");
@@ -37,6 +38,7 @@ app.use(morgan("dev"));
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 // API routes
+app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/accounts", accountRouter);
 app.use("/api/category", categoryRouter);
@@ -57,20 +59,6 @@ app.use((err, req, res, next) => {
 });
 
 // POST_AUTH =========
-app.post("/auth", (req, res) => {
-  try {
-    const id = req.body.id;
-
-    if (!id) return res.status(400).json({ message: "enter valid credientials" });
-
-    const token = signToken({ id }, process.env.JWT_SECRET, process.env.JWT_EXPIRES);
-    const refreshToken = signToken({ id }, process.env.REFRESH_SECRET, process.env.REFRESH_EXPIRES);
-
-    return res.status(201).json({ token: token, refreshToken: refreshToken });
-  } catch (error) {
-    return HttpError(401, "unauthorized");
-  }
-});
 
 app.post("/auth/refresh", (req, res) => {
   const { id, refreshToken } = req.body;

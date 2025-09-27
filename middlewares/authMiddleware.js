@@ -1,6 +1,6 @@
 const { signToken, checkToken, verifyRefresh } = require("../services/jwtService");
 
-exports.authMiddleware = (req, res, next) => {
+exports.authentificate = (req, res, next) => {
   const rawToken = req.headers.authorization;
 
   if (!rawToken) return res.status(401).json("unauthorized");

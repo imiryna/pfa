@@ -8,6 +8,10 @@ exports.getOneUser = async (id) => {
   return await runQuery("SELECT * FROM users WHERE id = $1", [id]);
 };
 
+exports.getUserByEmail = async (email) => {
+  return await runQuery("SELECT * FROM users WHERE email= $1", [email]);
+};
+
 exports.createUser = async ({ name, email, password }) => {
   const query = "INSERT INTO users (full_name, email, password) VALUES ($1, $2, $3) RETURNING *";
   const params = [name, email, password];
