@@ -9,7 +9,7 @@ router.use(authentificate);
 router.get("/", getAllCategories);
 router.get("/:id", getCategoryById);
 router.post("/", createNewCategory);
-router.post("/:id", updateCategory);
+router.patch("/:id", updateCategory);
 router.delete("/:id", deleteCategory);
 
 module.exports = router;

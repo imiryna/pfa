@@ -9,7 +9,7 @@ router.use(authentificate);
 router.get("/", getAllBudgets);
 router.get("/:id", getBudgetById);
 router.post("/", createNewBudget);
-router.post("/:id", updateBudget);
+router.patch("/:id", updateBudget);
 router.delete("/:id", deleteBudgetById);
 
 module.exports = router;

@@ -15,3 +15,15 @@ exports.authentificate = async (req, res, next) => {
   }
   next();
 };
+
+exports.checkSignupData = async (req, res, next) => {
+  const { value, error } = authValidation.registSchema.validate(req.body);
+
+  if (error) {
+    throw new HttpError(400, "Invalid user data..", error);
+  }
+
+  req.body = value;
+
+  next();
+};

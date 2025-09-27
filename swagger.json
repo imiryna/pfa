@@ -157,7 +157,7 @@
           }
         }
       },
-      "post": {
+      "path": {
         "summary": "Update category by ID",
         "parameters": [
           {
@@ -277,7 +277,7 @@
           }
         }
       },
-      "post": {
+      "path": {
         "summary": "Update user by ID",
         "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
         "requestBody": {
@@ -347,7 +347,7 @@
           }
         }
       },
-      "post": {
+      "path": {
         "summary": "Update account",
         "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
         "requestBody": {
