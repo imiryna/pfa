@@ -34,10 +34,8 @@ exports.createNewCategory = async (req, res, next) => {
   try {
     const categoryData = req.body;
 
-    const isUser = await getOneUser(categoryData.user_id);
-
-    if (isUser.rowCount < 1) {
-      return HttpError(404, "User not found");
+    if (categoryData.user_id !== req.currentUser.id) {
+      return HttpError(403, "You are not allowed to access or modify this account");
     }
 
     const result = await createCategory({
@@ -68,12 +66,6 @@ exports.updateCategory = async (req, res, next) => {
     const category = await getOneCategory(id);
     if (!category) {
       return HttpError(404, "Category not found");
-    }
-
-    // check if user exists
-    const isUser = req.body.user_id;
-    if (isUser.rowCount < 1) {
-      return HttpError(404, "User not found");
     }
 
     updateCategoryInDb(id, user_id, name, category_type);

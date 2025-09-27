@@ -64,15 +64,9 @@ exports.updateUser = async (req, res, next) => {
     const { id } = req.params;
     const { name, email } = req.body;
 
-    // check if user exists
-    const user = await getOneUser(id);
-    if (!user) {
-      return HttpError(404, "User not found");
-    }
-
     updateUserInDb(id, name, email);
 
-    response.status(200).send(`User modified with ID: ${id}`);
+    res.status(200).json(`User modified with ID: ${id}`);
   } catch (er) {
     next(er);
   }
@@ -91,7 +85,7 @@ exports.deleteUser = async (req, res, next) => {
 
     deleteUserById(id);
 
-    response.status(200).send(`User deleted with ID: ${id}`);
+    res.status(200).json(`User deleted with ID: ${id}`);
   } catch (error) {
     next(error);
   }

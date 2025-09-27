@@ -34,13 +34,9 @@ exports.createNewAccount = async (req, res, next) => {
   try {
     const accountData = req.body;
 
-    const isUser = await getOneUser(accountData.user_id);
-
-    if (isUser.rowCount < 1) {
-      return HttpError(404, "User not found");
+    if (accountData.user_id !== req.currentUser.id) {
+      return HttpError(403, "You are not allowed to access or modify this account");
     }
-
-    // console.log(passwordValidate);
 
     const result = await createAccount({
       user_id: accountData.user_id,
@@ -72,12 +68,6 @@ exports.updateAccount = async (req, res, next) => {
     const account = await getOneAccount(id);
     if (!account) {
       return HttpError(404, "Account not found");
-    }
-
-    // check if user exists
-    const isUser = req.body.user_id;
-    if (isUser.rowCount < 1) {
-      return HttpError(404, "User not found");
     }
 
     updateAccountInDb(id, user_id, account_type, institution_name, alias, currency, balance);

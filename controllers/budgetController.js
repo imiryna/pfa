@@ -33,15 +33,13 @@ exports.createNewBudget = async (req, res, next) => {
   try {
     const budgetData = req.body;
 
-    const isUser = await getOneUser(budgetData.user_id);
-
-    if (isUser.rowCount < 1) {
-      return HttpError(404, "User not found");
-    }
-
     const isCategory = await getOneCategory(budgetData.category_id);
     if (isCategory.rowCount < 1) {
       return HttpError(404, "Category not found");
+    }
+
+    if (budgetData.user_id !== req.currentUser.id) {
+      return HttpError(403, "You are not allowed to access or modify this budget");
     }
 
     const result = await createBudget({
@@ -73,12 +71,6 @@ exports.updateBudget = async (req, res, next) => {
     const budget = await getOneBudget(id);
     if (!budget) {
       return HttpError(404, "Budget not found");
-    }
-
-    // check if user exists
-    const isUser = req.body.user_id;
-    if (isUser.rowCount < 1) {
-      return HttpError(404, "User not found");
     }
 
     const isCategory = req.body.category_id;

@@ -4,10 +4,10 @@ const { authentificate } = require("../middlewares");
 
 const router = Router();
 
-router.use(authentificate.protect);
+router.use(authentificate);
 
-router.post("/net_disposable_income", calcDisposableIncome);
-router.post("/saving_rate", calcSavingRate);
-router.post("/maximum_loan", calcMaximumLoan);
+router.get("/net_disposable_income", calcDisposableIncome);
+router.get("/saving_rate", calcSavingRate);
+router.get("/maximum_loan", calcMaximumLoan);
 
 module.exports = router;

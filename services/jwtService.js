@@ -2,6 +2,9 @@
 
 const HttpError = require("../helpers/httpError");
 const crypto = require("crypto");
+const bcrypt = require("bcrypt");
+const { getUserByEmail } = require("./usersService");
+const { runQuery } = require("../db");
 
 // Convert a string to Base64
 const toBase64Encode = (input) => {
@@ -57,28 +60,63 @@ const verify = (token, secret) => {
   return bodyDecod;
 };
 
-//checkToken
-exports.checkToken = (token) => {
+//checkAccessToken
+exports.checkAccessToken = async (token) => {
   try {
     const { email } = verify(token, process.env.JWT_SECRET);
-
-    return email;
+    const userQueryResult = await getUserByEmail(email);
+    return userQueryResult.rows[0];
   } catch (error) {
     throw new HttpError(401, error.message);
   }
 };
 
-//verifyRefresh of token
-exports.verifyRefresh = (email, token) => {
+// checkRefreshToken
+exports.checkRefreshToken = async (token) => {
   try {
-    const decoded = verify(token, process.env.REFRESH_SECRET);
+    const { email } = verify(token, process.env.REFRESH_SECRET);
 
-    if (decoded.email !== email) {
-      throw new HttpError(403, "Token does not match user");
-    }
-
-    return decoded.email === email;
+    const userQueryResult = await getUserByEmail(email);
+    return userQueryResult.rows[0];
   } catch (error) {
     throw new HttpError(401, error.message);
   }
+};
+
+exports.loginUser = async (email, password) => {
+  const userResult = await getUserByEmail(email);
+
+  if (userResult.rowCount == 0) throw new HttpError(401, "Invalid email or password");
+
+  const user = userResult.rows[0];
+  // if (!user) {
+  //   throw new HttpError(401, "Invalid email or password");
+  // }
+
+  const passwordCompare = await bcrypt.compare(password, user.password);
+  if (!passwordCompare) {
+    throw new HttpError(401, "Invalid email or password");
+  }
+
+  const token = this.signToken({ email: user.email }, process.env.JWT_SECRET, process.env.JWT_EXPIRES);
+  const refreshToken = this.signToken({ email: user.email }, process.env.REFRESH_SECRET, process.env.REFRESH_EXPIRES);
+
+  await insertToken(email, refreshToken);
+
+  user.password = undefined;
+  user.token = undefined;
+
+  return { user, token, refreshToken };
+};
+
+// exports.logout = (email, refreshtoken) => {
+//   currentUser.token = "";
+//   currentUser.save();
+//   return currentUser;
+// };
+
+const insertToken = async (email, refreshToken) => {
+  const params = [refreshToken, email];
+  const query = "UPDATE users SET token = $1 WHERE email = $2";
+  return await runQuery(query, params);
 };

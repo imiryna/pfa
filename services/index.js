@@ -1,5 +1,5 @@
 const { getUsers, getOneUser, getUserByEmail, createUser, updateUserInDb, deleteUserById } = require("./usersService");
-const { verifyRefresh, signToken } = require("./jwtService");
+const { checkAccessToken, checkRefreshToken, signToken, loginUser } = require("./jwtService");
 const { getAccounts, getOneAccount, createAccount, updateAccountInDb, updateAccountBalance, deleteAccountById } = require("./accountService");
 const { getCategories, getOneCategory, createCategory, updateCategoryInDb, deleteCategoryById } = require("./categoryService");
 const { getTransaction, getOneTransaction, createTransaction } = require("./transactionService");
@@ -13,8 +13,10 @@ module.exports = {
   createUser,
   updateUserInDb,
   deleteUserById,
-  verifyRefresh,
+  checkAccessToken,
+  checkRefreshToken,
   signToken,
+  loginUser,
   getAccounts,
   getOneAccount,
   createAccount,

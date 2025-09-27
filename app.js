@@ -1,10 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
 const morgan = require("morgan");
-const { signToken, verifyRefresh } = require("./services/jwtService");
-const HttpError = require("./helpers/httpError");
-const { getUsers, createUser } = require("./services");
 
 require("dotenv").config();
 

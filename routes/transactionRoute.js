@@ -4,7 +4,7 @@ const { authentificate } = require("../middlewares");
 
 const router = Router();
 
-router.use(authentificate.protect);
+router.use(authentificate);
 
 router.get("/", getAllTransaction);
 router.get("/:id", getTransactionById);

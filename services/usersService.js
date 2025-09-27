@@ -9,7 +9,7 @@ exports.getOneUser = async (id) => {
 };
 
 exports.getUserByEmail = async (email) => {
-  return await runQuery("SELECT * FROM users WHERE email= $1", [email]);
+  return await runQuery("SELECT * FROM users WHERE users.email = $1", [email]);
 };
 
 exports.createUser = async ({ name, email, password }) => {

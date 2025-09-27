@@ -1,6 +1,6 @@
-const { signToken, checkToken, verifyRefresh } = require("../services/jwtService");
+const { checkAccessToken } = require("../services");
 
-exports.authentificate = (req, res, next) => {
+exports.authentificate = async (req, res, next) => {
   const rawToken = req.headers.authorization;
 
   if (!rawToken) return res.status(401).json("unauthorized");
@@ -8,7 +8,8 @@ exports.authentificate = (req, res, next) => {
 
   //verify of token
   try {
-    checkToken(token);
+    const currentUser = await checkAccessToken(token);
+    req.currentUser = currentUser;
   } catch (e) {
     return res.status(e.status).json({ message: e.message });
   }

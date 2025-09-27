@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS users(
 	id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
 	email varchar(50) NOT NULL UNIQUE,
 	password varchar(60) NOT NULL,
-	full_name varchar(255)
+	full_name varchar(255),
+  token varchar(148)
 );
 
 -- Create Account table
@@ -73,9 +74,9 @@ CREATE INDEX IF NOT EXISTS idx_budget_user_id      ON budget(user_id);
 -- === USERS ===
 INSERT INTO users (id, email, password, full_name)
   VALUES
-    ('ae75ffdb-f9cc-4ca5-ac99-e1437746b066','alice@example.com', 'hashedpassword1', 'Alice Kowalska'),
-    ('a2686efc-b89d-40ef-b111-663ce7b64324', 'bob@example.com',   'hashedpassword2', 'Bob Nowak'),
-    ('1a42ec4e-e3f0-476f-a13b-891dc9986b93', 'carol@example.com', 'hashedpassword3', 'Carol Wisniewska');
+    ('ae75ffdb-f9cc-4ca5-ac99-e1437746b066','alice@example.com', '$2b$10$wNG0/1Jcosfm/V6H54bAXe58q9RetgmlCmnjriXKOTDmx8iskEz1q', 'Alice Kowalska'),
+    ('a2686efc-b89d-40ef-b111-663ce7b64324', 'bob@example.com',   '$2b$10$wNG0/1Jcosfm/V6H54bAXe58q9RetgmlCmnjriXKOTDmx8iskEz1q', 'Bob Nowak'),
+    ('1a42ec4e-e3f0-476f-a13b-891dc9986b93', 'carol@example.com', '$2b$10$wNG0/1Jcosfm/V6H54bAXe58q9RetgmlCmnjriXKOTDmx8iskEz1q', 'Carol Wisniewska');
 
 -- === ACCOUNTS ===
 -- Alice

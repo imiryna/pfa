@@ -1,37 +1,31 @@
-const bcrypt = require("bcrypt");
-const HttpError = require("../helpers/httpError");
-const { getUserByEmail } = require("../services");
-const { signToken, verifyRefresh } = require("../services");
+const { loginUser, checkAccessToken, checkRefreshToken, signToken } = require("../services");
 
-exports.signIn = async (req, res) => {
+exports.signIn = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    if (!email) return res.status(400).json({ message: "enter valid credientials" });
-    const user = await getUserByEmail(email);
+    if (!email || !password) return res.status(400).json({ message: "enter valid credientials" });
+    const { user, token, refreshToken } = await loginUser(email, password);
 
-    if (!user) {
-      return res.status(401).json({ message: "Invalid email or password" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid email or password" });
-    }
-
-    const token = signToken({ email }, process.env.JWT_SECRET, process.env.JWT_EXPIRES);
-    const refreshToken = signToken({ email }, process.env.REFRESH_SECRET, process.env.REFRESH_EXPIRES);
-
-    return res.status(201).json({ token: token, refreshToken: refreshToken });
+    return res.status(201).json({ user, token, refreshToken });
   } catch (error) {
-    return HttpError(401, "unauthorized");
+    next(error);
   }
 };
 
-exports.refreshToken = async (req, res) => {
-  const { email, refreshToken } = req.body;
+exports.refreshToken = async (req, res, next) => {
+  const { refreshToken } = req.body;
 
-  if (!refreshToken) return res.status(401).json({ message: "Missing token" });
+  const payload = await checkRefreshToken(refreshToken);
+
+  // check DB
+  if (payload.token !== refreshToken) return res.status(401).json({ message: "Invalid refresh token" });
+
+  // generate new access token
+  const newAccessToken = signToken({ email: payload.email }, process.env.JWT_SECRET, 15 * 60);
+  res.status(201).json({ accessToken: newAccessToken });
+
+  // if (!refreshToken) return res.status(401).json({ message: "Missing token" });
 
   try {
     if (verifyRefresh(email, refreshToken)) {
@@ -39,6 +33,22 @@ exports.refreshToken = async (req, res) => {
       res.status(201).json({ email: email, accessToken: newAccessToken });
     }
   } catch (error) {
-    res.status(403).json({ message: "Invalid refresh token" });
+    next(error);
   }
 };
+
+exports.login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const { user, token, refreshToken } = await authenticateUser(email, password);
+
+    res.status(200).json({ user, token, refreshToken });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// exports.logout = async (req, res, next) => {
+//   try {
+//   } catch (error) {}
+// };
