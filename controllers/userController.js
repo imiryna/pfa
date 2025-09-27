@@ -39,8 +39,6 @@ exports.createUser = async (req, res, next) => {
 
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const passwordValidate = await bcrypt.compare(req.body.password, passwordHash);
-
     // console.log(passwordValidate);
 
     const result = await createUser({

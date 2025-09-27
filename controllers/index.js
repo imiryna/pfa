@@ -5,8 +5,11 @@ const { getAllTransaction, getTransactionById, createNewTransaction } = require(
 const { getAllBudgets, getBudgetById, createNewBudget, updateBudget } = require("./budgetController");
 const { deleteBudgetById } = require("../services");
 const { calcDisposableIncome } = require("./calculatesController");
+const { refreshToken, signIn } = require("./authController");
 
 module.exports = {
+  refreshToken,
+  signIn,
   getAllUsers,
   createUser,
   updateUser,

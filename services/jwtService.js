@@ -60,24 +60,24 @@ const verify = (token, secret) => {
 //checkToken
 exports.checkToken = (token) => {
   try {
-    const { id } = verify(token, process.env.JWT_SECRET);
+    const { email } = verify(token, process.env.JWT_SECRET);
 
-    return id;
+    return email;
   } catch (error) {
     throw new HttpError(401, error.message);
   }
 };
 
 //verifyRefresh of token
-exports.verifyRefresh = (id, token) => {
+exports.verifyRefresh = (email, token) => {
   try {
     const decoded = verify(token, process.env.REFRESH_SECRET);
 
-    if (decoded.id !== id) {
+    if (decoded.email !== email) {
       throw new HttpError(403, "Token does not match user");
     }
 
-    return decoded.id === id;
+    return decoded.email === email;
   } catch (error) {
     throw new HttpError(401, error.message);
   }

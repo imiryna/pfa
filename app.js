@@ -25,10 +25,6 @@ const { healthCheck } = require("./db");
 
 const app = express();
 
-// dotenv.config({
-//   path: "./.env",
-// });
-
 // MIDDLEWARE ========
 app.use(cors());
 app.use(express.json());
@@ -56,23 +52,6 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.stack });
-});
-
-// POST_AUTH =========
-
-app.post("/auth/refresh", (req, res) => {
-  const { id, refreshToken } = req.body;
-
-  if (!refreshToken) return res.status(401).json({ message: "Missing token" });
-
-  try {
-    if (verifyRefresh(id, refreshToken)) {
-      const newAccessToken = signToken({ id }, process.env.JWT_SECRET, process.env.JWT_EXPIRES);
-      res.status(201).json({ id: id, accessToken: newAccessToken });
-    }
-  } catch (error) {
-    res.status(403).json({ message: "Invalid refresh token" });
-  }
 });
 
 module.exports = app; // export instance app
