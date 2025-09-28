@@ -34,12 +34,8 @@ exports.createNewAccount = async (req, res, next) => {
   try {
     const accountData = req.body;
 
-    if (accountData.user_id !== req.currentUser.id) {
-      return HttpError(403, "You are not allowed to access or modify this account");
-    }
-
     const result = await createAccount({
-      user_id: accountData.user_id,
+      user_id: accountData.id,
       accountType: accountData.account_type,
       institutionName: accountData.institution_name,
       alias: accountData.alias,
@@ -72,7 +68,7 @@ exports.updateAccount = async (req, res, next) => {
 
     updateAccountInDb(id, user_id, account_type, institution_name, alias, currency, balance);
 
-    res.status(200).send(`Account modified with ID: ${id}`);
+    res.status(200).json(`Account modified with ID: ${id}`);
   } catch (er) {
     next(er);
   }

@@ -4,11 +4,13 @@ const { authentificate, checkAddUser, checkUpdateUser } = require("../middleware
 
 const router = Router();
 
+router.post("/", checkAddUser, createUser);
+
 router.use(authentificate);
 
 router.get("/", getAllUsers);
 router.get("/:id", getUserById);
-router.post("/", checkAddUser, createUser);
+
 router.patch("/:id", checkUpdateUser, updateUser);
 router.delete("/:id", deleteUser);
 

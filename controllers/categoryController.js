@@ -1,7 +1,6 @@
 const HttpError = require("../helpers/httpError");
 
 const { getCategories, getOneCategory, createCategory, updateCategoryInDb, deleteCategoryById } = require("../services");
-const { getOneUser } = require("../services");
 
 exports.getAllCategories = async (req, res, next) => {
   try {
@@ -34,12 +33,8 @@ exports.createNewCategory = async (req, res, next) => {
   try {
     const categoryData = req.body;
 
-    if (categoryData.user_id !== req.currentUser.id) {
-      return HttpError(403, "You are not allowed to access or modify this account");
-    }
-
     const result = await createCategory({
-      user_id: categoryData.user_id,
+      user_id: req.currentUser.id,
       name: categoryData.name,
       category_type: categoryData.category_type,
     });
@@ -70,7 +65,7 @@ exports.updateCategory = async (req, res, next) => {
 
     updateCategoryInDb(id, user_id, name, category_type);
 
-    res.status(200).send(`Category modified with ID: ${id}`);
+    res.status(200).json(`Category modified with ID: ${id}`);
   } catch (er) {
     next(er);
   }
@@ -89,7 +84,7 @@ exports.deleteCategory = async (req, res, next) => {
 
     deleteCategoryById(id);
 
-    res.status(200).send(`category deleted with ID: ${id}`);
+    res.status(200).json(`category deleted with ID: ${id}`);
   } catch (error) {
     next(error);
   }

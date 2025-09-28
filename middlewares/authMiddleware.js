@@ -1,4 +1,5 @@
 const { checkAccessToken } = require("../services");
+const authValidation = require("./schemas/validateAuth");
 
 exports.authentificate = async (req, res, next) => {
   const rawToken = req.headers.authorization;
@@ -17,7 +18,7 @@ exports.authentificate = async (req, res, next) => {
 };
 
 exports.checkSignupData = async (req, res, next) => {
-  const { value, error } = authValidation.registSchema.validate(req.body);
+  const { value, error } = authValidation.signUpSchema.validate(req.body);
 
   if (error) {
     throw new HttpError(400, "Invalid user data..", error);

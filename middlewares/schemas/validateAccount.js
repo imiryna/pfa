@@ -1,11 +1,6 @@
 const Joi = require("joi");
 
 const addAccountSchema = Joi.object({
-  user_id: Joi.string().uuid().required().messages({
-    "any.required": "User ID is required",
-    "string.guid": "User ID must be a valid UUID",
-  }),
-
   account_type: Joi.string().valid("bank", "cc", "investment", "cash", "crypto").required().messages({
     "any.required": "Account type is required",
     "any.only": "Account type must be one of bank, cc, investment, cash, crypto",

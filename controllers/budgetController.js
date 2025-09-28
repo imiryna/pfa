@@ -38,12 +38,8 @@ exports.createNewBudget = async (req, res, next) => {
       return HttpError(404, "Category not found");
     }
 
-    if (budgetData.user_id !== req.currentUser.id) {
-      return HttpError(403, "You are not allowed to access or modify this budget");
-    }
-
     const result = await createBudget({
-      user_id: budgetData.user_id,
+      user_id: budgetData.id,
       category_id: budgetData.account_id,
       amount: budgetData.amount,
       period: budgetData.period,
@@ -80,14 +76,14 @@ exports.updateBudget = async (req, res, next) => {
 
     deleteBudgetById(id, user_id, category_id, amount, period, end_date);
 
-    res.status(200).send(`Budget modified with ID: ${id}`);
+    res.status(200).json(`Budget modified with ID: ${id}`);
   } catch (er) {
     next(er);
   }
 };
 
 // delete
-exports.deleteAccount = async (req, res, next) => {
+exports.deleteBudget = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -99,7 +95,7 @@ exports.deleteAccount = async (req, res, next) => {
 
     deleteBudgetById(id);
 
-    res.status(200).send(`Account deleted with ID: ${id}`);
+    res.status(200).json(`Account deleted with ID: ${id}`);
   } catch (error) {
     next(error);
   }

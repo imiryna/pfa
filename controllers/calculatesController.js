@@ -1,5 +1,4 @@
-const HttpError = require("../helpers/httpError");
-const { getOneUser, disposalIncome, savingRate } = require("../services");
+const { disposalIncome, savingRate } = require("../services");
 
 exports.calcDisposableIncome = async (req, res) => {
   const d = await disposalIncome(req.currentUser.id);

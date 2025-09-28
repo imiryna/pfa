@@ -109,11 +109,11 @@ exports.loginUser = async (email, password) => {
   return { user, token, refreshToken };
 };
 
-// exports.logout = (email, refreshtoken) => {
-//   currentUser.token = "";
-//   currentUser.save();
-//   return currentUser;
-// };
+exports.logoutUser = async (id) => {
+  const params = [id];
+  const query = "UPDATE users SET token = null WHERE id = $1";
+  return await runQuery(query, params);
+};
 
 const insertToken = async (email, refreshToken) => {
   const params = [refreshToken, email];

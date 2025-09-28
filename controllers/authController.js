@@ -37,7 +37,11 @@ exports.refreshToken = async (req, res, next) => {
   }
 };
 
-// exports.logout = async (req, res, next) => {
-//   try {
-//   } catch (error) {}
-// };
+exports.logout = async (req, res, next) => {
+  try {
+    const { id } = req.currentUser;
+    await logoutUser(id);
+  } catch (error) {
+    next(error);
+  }
+};
