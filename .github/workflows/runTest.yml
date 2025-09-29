@@ -21,7 +21,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "Iron" # lts v20.x
+          node-version: 20.11.0
 
       # Install dependencies
       - name: Install Dependencies
