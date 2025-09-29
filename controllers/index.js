@@ -4,7 +4,7 @@ const { getAllCategories, getCategoryById, createNewCategory, updateCategory, de
 const { getAllTransaction, getTransactionById, createNewTransaction } = require("./transactionController");
 const { getAllBudgets, getBudgetById, createNewBudget, updateBudget, deleteBudget } = require("./budgetController");
 
-const { calcDisposableIncome } = require("./calculatesController");
+const { calcDisposableIncome, calcSavingRate, calcMaximumLoan } = require("./calculatesController");
 const { refreshToken, signIn } = require("./authController");
 
 module.exports = {
@@ -34,4 +34,6 @@ module.exports = {
   updateBudget,
   deleteBudget,
   calcDisposableIncome,
+  calcSavingRate,
+  calcMaximumLoan,
 };

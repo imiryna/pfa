@@ -8,11 +8,11 @@ exports.calcDisposableIncome = async (req, res) => {
 exports.calcSavingRate = async (req, res) => {
   const rate = await savingRate(req.currentUser.id);
 
-  return res.status(201).json({ "saving rate": rate });
+  return res.status(201).json({ savingRate: rate });
 };
 
 exports.calcMaximumLoan = async (req, res) => {
   const dispInc = await disposalIncome(req.currentUser.id);
 
-  return res.status(201).json("maximum loan", dispInc);
+  return res.status(201).json({ maximumLoan: dispInc });
 };

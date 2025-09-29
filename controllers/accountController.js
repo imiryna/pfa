@@ -1,7 +1,6 @@
 const HttpError = require("../helpers/httpError");
 
 const { getAccounts, getOneAccount, createAccount, updateAccountInDb, deleteAccountById } = require("../services/accountService");
-const { getOneUser } = require("../services/usersService");
 
 exports.getAllAccounts = async (req, res, next) => {
   try {
