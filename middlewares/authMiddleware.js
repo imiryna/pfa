@@ -1,5 +1,6 @@
 const { checkAccessToken } = require("../services");
 const authValidation = require("./schemas/validateAuth");
+const HttpError = require("../helpers/httpError");
 
 exports.authentificate = async (req, res, next) => {
   const rawToken = req.headers.authorization;

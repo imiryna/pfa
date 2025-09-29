@@ -23,7 +23,7 @@ exports.getCategoryById = async (req, res, next) => {
       return HttpError(404, "Category not found");
     }
 
-    return res.status(200).json(results.rows);
+    return res.status(200).json(result.rows);
   } catch (er) {
     next(er);
   }

@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const HttpError = require("../helpers/httpError");
 
-const { getUsers, getOneUser, createUser, updateUserInDb } = require("../services/usersService");
+const { getUsers, getOneUser, createUser, updateUserInDb, deleteUserById } = require("../services/usersService");
 
 exports.getAllUsers = async (req, res, next) => {
   try {
@@ -25,13 +25,13 @@ exports.getUserById = async (req, res, next) => {
       return HttpError(404, "User not found");
     }
 
-    return res.status(200).json(results.rows);
+    return res.status(200).json(result.rows);
   } catch (er) {
     next(er);
   }
 };
 
-exports.createUser = async (req, res, next) => {
+exports.createUser = async (req, res) => {
   try {
     const { password, ...restUserData } = req.body;
 

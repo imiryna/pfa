@@ -1,6 +1,6 @@
 const HttpError = require("../helpers/httpError");
 
-const { getOneUser, getBudget, getOneCategory, getOneBudget, createBudget, deleteBudgetById } = require("../services");
+const { getBudget, getOneCategory, getOneBudget, createBudget, deleteBudgetById } = require("../services");
 
 exports.getAllBudgets = async (req, res, next) => {
   try {
@@ -23,7 +23,7 @@ exports.getBudgetById = async (req, res, next) => {
       return HttpError(404, "Account not found");
     }
 
-    return res.status(200).json(results.rows);
+    return res.status(200).json(result.rows);
   } catch (er) {
     next(er);
   }

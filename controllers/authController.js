@@ -1,4 +1,4 @@
-const { loginUser, checkAccessToken, checkRefreshToken, signToken } = require("../services");
+const { loginUser, logoutUser, checkRefreshToken, signToken } = require("../services");
 
 exports.signIn = async (req, res, next) => {
   try {
@@ -13,7 +13,7 @@ exports.signIn = async (req, res, next) => {
   }
 };
 
-exports.refreshToken = async (req, res, next) => {
+exports.refreshToken = async (req, res) => {
   const { refreshToken } = req.body;
 
   const payload = await checkRefreshToken(refreshToken);
@@ -23,18 +23,7 @@ exports.refreshToken = async (req, res, next) => {
 
   // generate new access token
   const newAccessToken = signToken({ email: payload.email }, process.env.JWT_SECRET, 15 * 60);
-  res.status(201).json({ accessToken: newAccessToken });
-
-  // if (!refreshToken) return res.status(401).json({ message: "Missing token" });
-
-  try {
-    if (verifyRefresh(email, refreshToken)) {
-      const newAccessToken = signToken({ email }, process.env.JWT_SECRET, process.env.JWT_EXPIRES);
-      res.status(201).json({ email: email, accessToken: newAccessToken });
-    }
-  } catch (error) {
-    next(error);
-  }
+  return res.status(201).json({ accessToken: newAccessToken });
 };
 
 exports.logout = async (req, res, next) => {
