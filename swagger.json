@@ -157,7 +157,7 @@
           }
         }
       },
-      "path": {
+      "patch": {
         "summary": "Update category by ID",
         "parameters": [
           {
@@ -367,6 +367,60 @@
         "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
         "responses": {
           "200": { "description": "Account deleted" }
+        }
+      }
+    },
+    "/api/net_disposable_income": {
+      "get": {
+        "summary": "Calculate Net Disposable Income (NDI) for current user",
+        "description": "Calculate Net Disposable Income (NDI) for the current authenticated user.",
+        "responses": {
+          "200": {
+            "description": "Calculation successful",
+            "content": {
+              "application/json": {
+                "example": {
+                  "netDisposableIncome": 3500.5
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/saving_rate": {
+      "get": {
+        "summary": "Calculate Saving rate for current user",
+        "description": "Calculate saving rate for the current authenticated user.",
+        "responses": {
+          "200": {
+            "description": "Calculation successful",
+            "content": {
+              "application/json": {
+                "example": {
+                  "savingRate": 0.25
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/maximum_loan": {
+      "get": {
+        "summary": "Calculate Maximum possible loan for current user",
+        "description": "Calculate the maximum possible loan amount for the current authenticated user.",
+        "responses": {
+          "200": {
+            "description": "Calculation successful",
+            "content": {
+              "application/json": {
+                "example": {
+                  "maximumLoan": 120000
+                }
+              }
+            }
+          }
         }
       }
     }

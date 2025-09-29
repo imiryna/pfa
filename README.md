@@ -11,21 +11,21 @@
 - [Relationships](#relationships)
   - [Entity Relationship Diagram](#entity-relationship-diagram)
   - [Detailed Table Information](#detailed-table-information)
-    - [Employee](#employee)
-    - [Trains](#trains)
-    - [Lines](#lines)
-    - [Stations](#stations)
-    - [Schedule](#schedule)
+    - [Users](#employee)
+    - [Account](#trains)
+    - [Category](#lines)
+    - [transaction](#stations)
+    - [Budget](#schedule)
     - [Junction Tables](#junction-tables)
       - [Stations_Line](#stations_line)
       - [Trains_Schedule](#trains_schedule)
 - [Relationships Explained](#relationships-explained)
 - [Endpoints API Documentation](#endpoints-api-documentation)
-  - [Employees Overview](#employees-overview-apiemployees)
-  - [Trains Overview](#trains-overview-apitrains)
-  - [Stations Overview](#stations-overview-apistations)
-  - [Lines Overview](#lines-overview-apilines)
-  - [Schedules Overview](#schedules-overview-apischedules)
+  - [Users Overview](#employees-overview-apiemployees)
+  - [Account Overview](#trains-overview-apitrains)
+  - [Category Overview](#stations-overview-apistations)
+  - [Transaction Overview](#lines-overview-apilines)
+  - [Budget Overview](#schedules-overview-apischedules)
 - [License](#license)
 
 ## Overview
@@ -115,8 +115,6 @@ Schema executed successfully
 
 ## Summary
 
-## Authentication
-
 ### Authentication Process (JWT)
 
 This API implements authentication using a **custom JWT implementation** (without `jsonwebtoken`).  
@@ -129,16 +127,17 @@ The flow is based on **two tokens**:
 
 ### 1. Get a Token
 
-Send a `POST` request to `/api/auth` with a JSON body containing the `id`.
+Send a `POST` request to `/api/auth` with a JSON body containing the `email`.
 
 ### Example Request
 
 ```http
-POST /api/auth
+POST /api/auth/signin
 Content-Type: application/json
 
 {
-  "id": 242
+  "email": "user@example.com",
+  "password": "password123"
 }
 ```
 
@@ -146,13 +145,17 @@ Content-Type: application/json
 
 ```
 {
-  "id": 242,
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5...",
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5..."
+  "user": { "id": 242, "email": "user@example.com" },
+  "token": "<accessToken>",
+  "refreshToken": "<refreshToken>"
 }
 ```
 
 The returned token must be used in the Authorization header for all protected routes.
+
+```
+Authorization: Bearer <accessToken>
+```
 
 ## 2. Access Protected Routes
 
@@ -167,7 +170,7 @@ Authorization: Bearer <accessToken>
 
 ```
 POST /api/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5...
+Authorization: Bearer <accessToken>
 Content-Type: application/json
 
 {
@@ -191,12 +194,23 @@ When the accessToken has expired, you can request a new one using the refreshTok
 ### Example Reqest
 
 ```
-POST /auth/refresh
+POST /api/auth/refresh
 Content-Type: application/json
 
 {
-  "id": 242,
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5..."
+
+  "refreshToken": "<newAccessToken>"
+}
+```
+
+## 4.Logout
+
+```
+POST /api/auth/refresh
+
+{
+
+"message": "Logged out successfully"
 }
 ```
 
@@ -208,6 +222,165 @@ Invalid or expired token → 401 Unauthorized
 
 Invalid request body (e.g., missing fields) → 400 Bad Request (after validation is implemented)
 
-- ### Register
+## Entity Relationship Diagram
 
-- ### Login
+![alt text](./fin_advisor%20-%20public.png)
+
+## Entity Relationship Diagram
+
+### Users
+
+| Column    | Type    | Description                         |
+| --------- | ------- | ----------------------------------- |
+| id        | PK      | The unique identifier of the users. |
+| email     | VARCHAR | The email of the users.             |
+| password  | VARCHAR | The password of the users.          |
+| full_name | VARCHAR | The name of the users.              |
+| token     | VARCHAR | The token of the users.             |
+
+### Account
+
+| Column           | Type                                         | Description                             |
+| ---------------- | -------------------------------------------- | --------------------------------------- |
+| id               | PK                                           | The unique identifier of the account.   |
+| user_id          | FK (INT)                                     | The users assigned to this account.     |
+| account_type     | 'bank', 'cc', 'investment', 'cash', 'crypto' | The type of the account.                |
+| institution_name | VARCHAR                                      | The name of institution of the account. |
+| alias            | VARCHAR                                      | The description of the acoount.         |
+| currency         | CHAR                                         | The currency of the account.            |
+| balance          | NUMERIC                                      | The balance of the account.             |
+| create_at        | TIMESTAMP                                    | The creating time of the account.       |
+
+### Category
+
+| Column        | Type                             | Description                              |
+| ------------- | -------------------------------- | ---------------------------------------- |
+| id            | PK                               | The unique identifier of the category.   |
+| user_id       | FK (INT)                         | The users assigned to this category.     |
+| name          | VARCHAR                          | The name of the account.                 |
+| category_type | 'income', 'expenses', 'transfer' | The name of institution of the category. |
+
+### Transaction
+
+| Column      | Type      | Description                                |
+| ----------- | --------- | ------------------------------------------ |
+| id          | PK        | The unique identifier of the transaction.  |
+| account_id  | FK        | The account assigned to this transaction.  |
+| category_id | FK        | The category assigned to this transaction. |
+| amount      | NUMERIC   | The amoun of the transaction.              |
+| create_at   | TIMESTAMP | The creating time of the transaction.      |
+| tags        | text[ ]   | The tegs of the account.                   |
+
+### Budget
+
+| Column      | Type                                               | Description                             |
+| ----------- | -------------------------------------------------- | --------------------------------------- |
+| id          | PK                                                 | The unique identifier of the budget.    |
+| user_id     | FK (INT)                                           | The users assigned to this transaction. |
+| category_id | FK                                                 | The category assigned to this budget.   |
+| amount      | NUMERIC                                            | The amoun of the budget.                |
+| period      | 'daily', 'weekly', 'biweekly', 'monthly', 'annual' | The type of period of the budget.       |
+| start_date  | TIMESTAMP                                          | The start date of the budget formation. |
+| end_date    | TIMESTAMP                                          | The end of the budget formation.        |
+
+## Relationships Explained
+
+- **Users → Accounts**: **One-to-Many**  
+  A user may have many accounts, but each account belongs to one user.
+
+- **Users → Categories**: **One-to-Many**  
+  A user may create many categories, but each category belongs to one user (or exist as global, without `user_id`).
+
+- **Users → Budgets**: **One-to-Many**  
+  A user may set multiple budgets, but each budget belongs to one user.
+
+- **Accounts → Transactions**: **One-to-Many**  
+  An account may have many transactions, but each transaction is tied to one account.
+
+- **Categories → Transactions**: **One-to-Many**  
+  A category may classify many transactions, but each transaction has one category.
+
+- **Categories → Budgets**: **One-to-Many**  
+  A category may appear in many budgets, but each budget targets one category.
+
+## Endpoints API Documentation
+
+## Auth Overview (`/auth`)
+
+| Method | Endpoint        | Description                                                                   | Success Code | Error Code |
+| ------ | --------------- | ----------------------------------------------------------------------------- | ------------ | ---------- |
+| POST   | `/auth/signin`  | Authenticate a user with email & password. Returns access and refresh tokens. | 200          | 401        |
+| POST   | `/auth/refresh` | Provide a valid refresh token to get a new access token.                      | 200          | 401        |
+
+---
+
+## Users Overview (`/api/users`)
+
+| Method | Endpoint          | Description       | Success Code | Error Code |
+| ------ | ----------------- | ----------------- | ------------ | ---------- |
+| GET    | `/api/users`      | Get all users     | 200          | —          |
+| POST   | `/api/users`      | Create a new user | 201          | —          |
+| GET    | `/api/users/{id}` | Get user by ID    | 200          | 404        |
+| PATCH  | `/api/users/{id}` | Update user by ID | 200          | 404        |
+| DELETE | `/api/users/{id}` | Delete user by ID | 200          | 404        |
+
+---
+
+## Accounts Overview (`/api/accounts`)
+
+| Method | Endpoint             | Description          | Success Code | Error Code |
+| ------ | -------------------- | -------------------- | ------------ | ---------- |
+| GET    | `/api/accounts`      | Get all accounts     | 200          | —          |
+| POST   | `/api/accounts`      | Create a new account | 201          | —          |
+| GET    | `/api/accounts/{id}` | Get account by ID    | 200          | 404        |
+| PATCH  | `/api/accounts/{id}` | Update account by ID | 200          | 404        |
+| DELETE | `/api/accounts/{id}` | Delete account by ID | 200          | 404        |
+
+---
+
+## Categories Overview (`/api/categories`)
+
+| Method | Endpoint               | Description           | Success Code | Error Code |
+| ------ | ---------------------- | --------------------- | ------------ | ---------- |
+| GET    | `/api/categories`      | Get all categories    | 200          | —          |
+| POST   | `/api/categories`      | Create a new category | 201          | —          |
+| GET    | `/api/categories/{id}` | Get category by ID    | 200          | 404        |
+| PATCH  | `/api/categories/{id}` | Update category by ID | 200          | 404        |
+| DELETE | `/api/categories/{id}` | Delete category by ID | 200          | 404        |
+
+---
+
+## Transactions Overview (`/api/transactions`)
+
+| Method | Endpoint                 | Description           | Success Code | Error Code |
+| ------ | ------------------------ | --------------------- | ------------ | ---------- |
+| GET    | `/api/transactions`      | Get all transactions  | 200          | —          |
+| GET    | `/api/transactions/{id}` | Get transaction by ID | 200          | 404        |
+
+---
+
+## Calculations Overview (`/api/calc`)
+
+| Method | Endpoint                     | Description                                            | Success Code | Error Code |
+| ------ | ---------------------------- | ------------------------------------------------------ | ------------ | ---------- |
+| GET    | `/api/net_disposable_income` | Calculate Net Disposable Income (NDI) for current user | 200          | —          |
+| GET    | `/api/saving_rate`           | Calculate Saving rate for current user                 | 200          | -          |
+| GET    | `/api/maximum_loan`          | Calculate Maximum possible loan for current user       | 200          | -          |
+
+---
+
+# Run tests
+
+Root directory of the project
+
+```
+npm run test
+```
+
+# Run lint
+
+Root directory of the project
+
+```
+npm run lint
+```
